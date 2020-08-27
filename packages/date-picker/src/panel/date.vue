@@ -34,7 +34,7 @@
                 :placeholder="t('el.datepicker.selectTime')"
                 :value="visibleTime"
                 size="small"
-                @input="val => userInputTime = val"
+                @input="zaFormatLastTime"
                 @change="handleVisibleTimeChange" />
               <time-picker
                 ref="timepicker"
@@ -321,9 +321,17 @@
       },
 
       handleTimePickClose() {
-        this.timePickerVisible = false;
+        // edit by za
+        // this.timePickerVisible = false;
       },
-
+      // 自定义，时间输入时分秒支持235959自动格式化为23:59:59
+      zaFormatLastTime(val) {
+        let result = val;
+        if (val && val.length === 6 && val.indexOf(':') === -1) {
+          result = `${val.slice(0, 2)}:${val.slice(2, 4)}:${val.slice(4)}`;
+        }
+        this.userInputTime = result;
+      },
       handleMonthPick(month) {
         if (this.selectionMode === 'month') {
           this.date = modifyDate(this.date, this.year, month, 1);
